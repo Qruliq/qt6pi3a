@@ -44,9 +44,10 @@ Dla ułatwienia sprway możemy w bashu zadeklarować parę zmiennych, które prz
 ```
 QT_VERSION="6.5.1"
 QT_MODULES="qtbase,qtshadertools,qtdeclarative"
-PARALLELIZATION="8"
 TZ="Warsaw"
 USER="user"
+pi_username="pi"
+pi_ip_address="192.168.2.153"
 ```
 Instalujemy pakiety wymagane do "cross-kompilacji". Tworzymy też foldery w których będzimy mieli kompilator dla QT oraz sysroot.
 ```
@@ -57,8 +58,28 @@ sudo apt install -y libssl-dev
 sudo apt install -y rsync wget
 mkdir rpi-sysroot rpi-sysroot/usr rpi-sysroot/opt 
 mkdir qt-host qt-raspi qthost-build qtpi-build
---chown=qtpi:qtpi rpi-sysroot /home/qtpi/rpi-sysroot
-wget https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py
-chmod u+x sysroot-relativelinks.py
-python3 sysroot-relativelinks.py rpi-sysroot
+```
+Wykorzystując rsync, budujemy sysroot z mikrokontrolera na naszym PC. Jeżeli pliki z katalogu `opt` nie będą chciały sie przekopiować, to możemy je pominąć. Rsync wykorzystuje SSH, dlatego polecam kontrolnie się skomunikować z kontrolerem po tym protokole. Jeżeli nie znasz IP swojego urządzenia, polecam The Adafruit Raspberry Pi Finder, który można pobrać: https://learn.adafruit.com/the-adafruit-raspberry-pi-finder/finding-and-connecting
+```
+rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/lib rpi-sysroot
+rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/usr/include rpi-sysroot/usr
+rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/usr/lib rpi-sysroot/usr
+rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/opt/vc rpi-sysroot/opt
+sudo apt install symlinks
+symlinks -rc rpi-sysroot
+```
+## Instalacja QT
+QT instalujemy według poniższego kodu.
+```
+git clone git://code.qt.io/qt/qt5.git qt6
+cd qt6
+git checkout v${QT_VERSION}
+perl init-repository -f
+cd ..
+cd qthost-build
+../qt6/configure -prefix /home/$USER/qt-host
+cmake --build . --parallel 8
+cmake --install .
+cd ..
+rm -rf qthost-build
 ```
