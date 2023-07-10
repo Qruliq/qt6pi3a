@@ -6,3 +6,4 @@ cd cmake-3.25.0
 make
 sudo make install
 cd ..
+cmake --version
