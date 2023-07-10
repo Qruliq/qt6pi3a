@@ -48,12 +48,17 @@ PARALLELIZATION="8"
 TZ="Warsaw"
 USER="user"
 ```
-Instalujemy pakiety wymagane do "cross-kompilacji". Tworzymy też foldery
+Instalujemy pakiety wymagane do "cross-kompilacji". Tworzymy też foldery w których będzimy mieli kompilator dla QT oraz sysroot.
 ```
+cd ..
 sudo apt-get install -y make build-essential libclang-dev ninja-build gcc git bison python3 gperf pkg-config libfontconfig1-dev libfreetype6-dev libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-util-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev libatspi2.0-dev libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev
 sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 sudo apt install -y libssl-dev
 sudo apt install -y rsync wget
 mkdir rpi-sysroot rpi-sysroot/usr rpi-sysroot/opt 
 mkdir qt-host qt-raspi qthost-build qtpi-build
+--chown=qtpi:qtpi rpi-sysroot /home/qtpi/rpi-sysroot
+wget https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py
+chmod u+x sysroot-relativelinks.py
+python3 sysroot-relativelinks.py rpi-sysroot
 ```
