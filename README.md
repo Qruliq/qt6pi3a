@@ -6,4 +6,10 @@ Temat "cross-kompilacji" jest bardzo dobrze znany w kręgach embedded. Również
 ## Przygotowanie
 * **Raspberry**
   
-Zacznijmy od "Maliny". Instalujemy na niej system operacyjny, w tym przypadku raspibian. Instalator można pobrać: 
+Zacznijmy od "Maliny". Instalujemy na niej system operacyjny, w tym przypadku raspibian. Instalator można pobrać: https://www.raspberrypi.com/software/operating-systems/
+Natępnie przeprowadzamy update systemu 
+```
+sudo apt update
+sudo apt full-upgrade
+sudo reboot
+```
