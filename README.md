@@ -69,7 +69,7 @@ sudo apt install symlinks
 symlinks -rc rpi-sysroot
 ```
 ## Instalacja QT
-QT instalujemy według poniższego kodu.
+QT instalujemy według poniższego kodu. Na stronie wiki QT instalacja korzysta z Gninja, podczas kilku prób instalacji QT na hoście zauważyłem że korzystanie z niej może stworzyć wiele problemu, dlatego w tym poradniku prowadzimy instalacje bez Gninja.
 ```
 git clone git://code.qt.io/qt/qt5.git qt6
 cd qt6
@@ -83,3 +83,31 @@ cmake --install .
 cd ..
 rm -rf qthost-build
 ```
+W następnej części korzystamy z toolchaina jaki został zamieszczony na stronie wiki. Należy jednak pamiętać o zmianie ścieżki do sysroota. Wykonujemy dalej kolejne czynności.
+```
+cd ..
+--chown=qtpi:qtpi toolchain.cmake /home/${USER}/toolchain.cmake
+cd qtpi-build 
+../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device ${RPI_DEVICE} -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON 
+cmake --build . --parallel 8
+cmake --install . 
+cd .. 
+rm -rf qtpi-build
+--chown=qtpi:qtpi _copyQtToRPi.sh /home/qtpi/copyQtToRPi.sh
+```
+**UWAGA!**
+Jeżeli nasz program korzysta z innych bibliotek niż te bazowe to należy je również zainstalować. Przykładowo jeżeli nasz program wykorzystuje bluetooth, to musimy zainstalować qtconnectivity. Zatem pobieramy pakiet przez `wget https://download.qt.io/archive/qt/6.5/6.5.1/submodules/qtconnectivity-everywhere-src-6.5.1.tar.xz`, następnie wypakowywujemy `tar -zxvf qtconnectivity-everywhere-src-6.5.1.tar.xz` i instalujemy w nastepujący sposób:
+```
+cd qtconnectivity-everywhere-src-6.5.1
+../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device ${RPI_DEVICE} -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON
+cmake --build . --parallel 4
+cmake --install .
+cd ..
+rm -rf qtconnectivity-everywhere-src-6.5.1
+```
+## Podsumowanie
+W poradniku https://github.com/PhysicsX/QTonRaspberryPi/blob/main/README.md zawarte są przykladowe programy za pomocą których możemy sprawdzić czy proces przebiegł pomyślnie.
+# Linki
+[1] https://wiki.qt.io/Cross-Compile_Qt_6_for_Raspberry_Pi
+[2] https://github.com/kevin-strobel/qt6pi3b/tree/master
+[3] https://github.com/PhysicsX/QTonRaspberryPi/tree/main
