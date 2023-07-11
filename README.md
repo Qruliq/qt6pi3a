@@ -61,10 +61,10 @@ mkdir qt-host qt-raspi qthost-build qtpi-build
 ```
 Wykorzystując rsync, budujemy sysroot z mikrokontrolera na naszym PC. Jeżeli pliki z katalogu `opt` nie będą chciały sie przekopiować, to możemy je pominąć. Rsync wykorzystuje SSH, dlatego polecam kontrolnie się skomunikować z kontrolerem po tym protokole. Jeżeli nie znasz IP swojego urządzenia, polecam The Adafruit Raspberry Pi Finder, który można pobrać: https://learn.adafruit.com/the-adafruit-raspberry-pi-finder/finding-and-connecting
 ```
-rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/lib rpi-sysroot
-rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/usr/include rpi-sysroot/usr
-rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/usr/lib rpi-sysroot/usr
-rsync -avz --rsync-path="sudo rsync" --delete $pi_username@$pi_ip_address:/opt/vc rpi-sysroot/opt
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/lib rpi-sysroot 
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/usr/include rpi-sysroot/usr 
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/usr/lib rpi-sysroot/usr 
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/opt/vc rpi-sysroot/opt 
 sudo apt install symlinks
 symlinks -rc rpi-sysroot
 ```
@@ -88,7 +88,7 @@ W następnej części korzystamy z toolchaina jaki został zamieszczony na stron
 cd ..
 --chown=qtpi:qtpi toolchain.cmake /home/${USER}/toolchain.cmake
 cd qtpi-build 
-../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device ${RPI_DEVICE} -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON 
+../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON 
 cmake --build . --parallel 8
 cmake --install . 
 cd .. 
@@ -99,7 +99,7 @@ rm -rf qtpi-build
 Jeżeli nasz program korzysta z innych bibliotek niż te bazowe to należy je również zainstalować. Przykładowo jeżeli nasz program wykorzystuje bluetooth, to musimy zainstalować qtconnectivity. Zatem pobieramy pakiet przez `wget https://download.qt.io/archive/qt/6.5/6.5.1/submodules/qtconnectivity-everywhere-src-6.5.1.tar.xz`, następnie wypakowywujemy `tar -zxvf qtconnectivity-everywhere-src-6.5.1.tar.xz` i instalujemy w nastepujący sposób:
 ```
 cd qtconnectivity-everywhere-src-6.5.1
-../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device ${RPI_DEVICE} -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON
+../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON
 cmake --build . --parallel 4
 cmake --install .
 cd ..
