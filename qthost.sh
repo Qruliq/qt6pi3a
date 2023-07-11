@@ -17,7 +17,7 @@ git checkout v${QT_VERSION} \
 perl init-repository -f \
 cd .. \
 cd qthost-build \ 
-../qt6/configure -prefix /home/$USER/qt-host \
+../qt6/configure -prefix /home/${USER}/qt-host \
 cmake --build . --parallel 8 \
 cmake --install . \
 cd .. \
