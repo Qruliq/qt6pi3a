@@ -43,11 +43,9 @@ Po wszystkim sprawdzamy czy wszystko poszło po naszej myśli wpisując `cmake -
 Dla ułatwienia sprway możemy w bashu zadeklarować parę zmiennych, które przydadzą nam się w dalszym procesie.
 ```
 QT_VERSION="6.5.1"
-QT_MODULES="qtbase,qtshadertools,qtdeclarative"
-TZ="Warsaw"
-USER="user"
 pi_username="pi"
 pi_ip_address="192.168.2.153"
+USER="user"
 ```
 Instalujemy pakiety wymagane do "cross-kompilacji". Tworzymy też foldery w których będzimy mieli kompilator dla QT oraz sysroot.
 ```
