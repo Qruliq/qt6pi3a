@@ -1,5 +1,4 @@
 QT_VERSION="6.5.1"
-QT_MODULES="qtbase,qtshadertools,qtdeclarative"
-PARALLELIZATION="8"
-TZ="Warsaw"
+pi_username="pi"
+pi_ip_address="192.168.2.153"
 USER="user"
