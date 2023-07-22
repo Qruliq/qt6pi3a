@@ -105,7 +105,7 @@ rm -rf qtconnectivity-everywhere-src-6.5.1
 ```
 ## Podsumowanie
 W poradniku https://github.com/PhysicsX/QTonRaspberryPi/blob/main/README.md zawarte są przykladowe programy za pomocą których możemy sprawdzić czy proces przebiegł pomyślnie.
-# Linki
+# Links
 [1] https://wiki.qt.io/Cross-Compile_Qt_6_for_Raspberry_Pi
 
 [2] https://github.com/kevin-strobel/qt6pi3b/tree/master
