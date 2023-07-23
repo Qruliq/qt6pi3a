@@ -1,5 +1,8 @@
 # qt6pi3a
 Cross-compiling Qt 6 Raspberry pi
+# ENG
+## About
+Cross-compilation is very well known in embedded circles. Also QT, due to its popularity, is often used in various projects. However, the latest version requires cmake, which at first glance should not be a problem, but problem appears with older hardware (in this case, raspberry). The official QT wiki doesn't help either, as its wiki only lists the process on Rpi4. This tutorial shows how to "cross" your program for Rpi3A+ and Ubuntu 20.04, furthermore with basic  knowledge in this matter, you will be able to repeat this process for other architectures/microcontrollers.
 # PL
 ## Wstęp
 Temat "cross-kompilacji" jest bardzo dobrze znany w kręgach embedded. Również QT ze względu na swoją popularność jest często wykorzystywana w różnych projektach. Jednakże najnowsza wersja wymaga użycia cmake, co na pierwszy rzut oka nie powinno być problem, aczkolwiek przy urzywaniu starszego hardwaru (w tym przypadku raspberry) może napsuć krwi. Oficjalna strona wiki QT również nie pomaga, gdyż w swojej wiki zawierte jest jedynie przeprowadzenie procesu na Rpi4. Poniżej przedstwione jest jak "skrosować" swój program dla Rpi3A+ i systemie Ubuntu 20.04, aczkolwiek rozumiejąc pewne zależności będzie się w stanie powtórzyć ten proces dla innych architektur/mikrokontrolerów.
