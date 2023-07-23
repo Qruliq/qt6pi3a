@@ -1,8 +1,8 @@
 # qt6pi3a
-Cross-compiling Qt 6 Raspberry pi
+Cross-Compile Qt 6 Raspberry pi
 # ENG
 ## About
-Cross-compilation is very well known in embedded circles. Also QT, due to its popularity, is often used in various projects. However, the latest version requires cmake, which at first glance should not be a problem, but problem appears with older hardware (in this case, raspberry). The official QT wiki doesn't help either, as its wiki only lists the process on Rpi4. This tutorial shows how to "cross" your program for Rpi3A+ and Ubuntu 20.04, furthermore with basic  knowledge in this matter, you will be able to repeat this process for other architectures/microcontrollers.
+Cross-Compile is very well known in embedded circles. Also QT, due to its popularity, is often used in various projects. However, the latest version requires cmake, which at first glance should not be a problem, but problem appears with older hardware (in this case, raspberry). The official QT wiki doesn't help either, as its wiki only lists the process on Rpi4. This tutorial shows how to "cross" your program for Rpi3A+ and Ubuntu 20.04, furthermore with basic  knowledge in this matter, you will be able to repeat this process for other architectures/microcontrollers.
 ## Getting Started
 * **Raspberry**
 
@@ -46,6 +46,62 @@ QT_VERSION="6.5.1"
 pi_username="pi"
 pi_ip_address="192.168.2.153"
 USER="user"
+```
+Install the packages required for Cross-Compile. Then create folders for QT compiler and sysroot.
+```
+cd ..
+sudo apt-get install -y make build-essential libclang-dev ninja-build gcc git bison python3 gperf pkg-config libfontconfig1-dev libfreetype6-dev libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-util-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev libatspi2.0-dev libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev
+sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+sudo apt install -y libssl-dev
+sudo apt install -y rsync wget
+mkdir rpi-sysroot rpi-sysroot/usr rpi-sysroot/opt 
+mkdir qt-host qt-raspi qthost-build qtpi-build
+```
+Using rsync, build sysroot from the microcontroller on PC. Your raspberry pi might not have a directory named `opt`, in this case it can be skipped without any negative consequences. Rsync uses SSH protocol, thus before rsync communicate with the controller via SSH. If you don't know the IP of your device, I recommend Adafruit Raspberry Pi Finder, which can be downloaded: https://learn.adafruit.com/the-adafruit-raspberry-pi-finder/finding-and-connecting
+```
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/lib rpi-sysroot 
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/usr/include rpi-sysroot/usr 
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/usr/lib rpi-sysroot/usr 
+rsync -avz --rsync-path="sudo rsync" --delete ${pi_username}@${pi_ip_address}:/opt/vc rpi-sysroot/opt 
+sudo apt install symlinks
+symlinks -rc rpi-sysroot
+```
+## Building Qt 6
+QT is installed according to the following instructions. QT wiki suggests using Gninja, but after several attempts to install QT on a host, I noticed that using it is very problematic, so in this guide QT is installed without using Gninja.
+```
+git clone git://code.qt.io/qt/qt5.git qt6
+cd qt6
+git checkout v${QT_VERSION}
+perl init-repository -f
+cd ..
+cd qthost-build
+../qt6/configure -prefix /home/$USER/qt-host
+cmake --build . --parallel 8
+cmake --install .
+cd ..
+rm -rf qthost-build
+```
+Next part describes how to use toolchain which was posted on the wiki page. Change the sysroot path and proceed.
+```
+cd ..
+--chown=qtpi:qtpi toolchain.cmake /home/${USER}/toolchain.cmake
+cd qtpi-build 
+../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON 
+cmake --build . --parallel 8
+cmake --install . 
+cd .. 
+rm -rf qtpi-build
+--chown=qtpi:qtpi _copyQtToRPi.sh /home/qtpi/copyQtToRPi.sh
+```
+**Attention!**
+If program uses other libraries than the base ones, they should also be installed. For example, if program uses bluetooth, qtconnectivity must be installed. So download the package via `wget https://download.qt.io/archive/qt/6.5/6.5.1/submodules/qtconnectivity-everywhere-src-6.5.1.tar.xz`, then unzip it via `tar -zxvf qtconnectivity-everywhere-src-6.5.1.tar.xz` and use the following prompts:
+```
+cd qtconnectivity-everywhere-src-6.5.1
+../qt6/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qt-host -extprefix $HOME/qt-raspi -prefix /usr/local/qt6 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON
+cmake --build . --parallel 4
+cmake --install .
+cd ..
+rm -rf qtconnectivity-everywhere-src-6.5.1
 ```
 # PL
 ## Wstęp
