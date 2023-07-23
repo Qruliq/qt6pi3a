@@ -104,6 +104,8 @@ cmake --install .
 cd ..
 rm -rf qtconnectivity-everywhere-src-6.5.1
 ```
+## Final thoughts
+I highly recommend checking following guide: https://github.com/PhysicsX/QTonRaspberryPi/blob/main/README.md it contains examples with which you can check whether the process was successful. Big shout out to Kevin Strobel and PhysicsX for helping me out with cross-compile issues. Links to their repositories can be found bellow. You are all truly wonderful.
 # PL
 ## Wstęp
 Temat "cross-kompilacji" jest bardzo dobrze znany w kręgach embedded. Również QT ze względu na swoją popularność jest często wykorzystywana w różnych projektach. Jednakże najnowsza wersja wymaga użycia cmake, co na pierwszy rzut oka nie powinno być problem, aczkolwiek przy urzywaniu starszego hardwaru (w tym przypadku raspberry) może napsuć krwi. Oficjalna strona wiki QT również nie pomaga, gdyż w swojej wiki zawierte jest jedynie przeprowadzenie procesu na Rpi4. Poniżej przedstwione jest jak "skrosować" swój program dla Rpi3A+ i systemie Ubuntu 20.04, aczkolwiek rozumiejąc pewne zależności będzie się w stanie powtórzyć ten proces dla innych architektur/mikrokontrolerów.
@@ -198,6 +200,7 @@ rm -rf qtpi-build
 --chown=qtpi:qtpi _copyQtToRPi.sh /home/qtpi/copyQtToRPi.sh
 ```
 **UWAGA!**
+
 Jeżeli nasz program korzysta z innych bibliotek niż te bazowe to należy je również zainstalować. Przykładowo jeżeli nasz program wykorzystuje bluetooth, to musimy zainstalować qtconnectivity. Zatem pobieramy pakiet przez `wget https://download.qt.io/archive/qt/6.5/6.5.1/submodules/qtconnectivity-everywhere-src-6.5.1.tar.xz`, następnie wypakowywujemy `tar -zxvf qtconnectivity-everywhere-src-6.5.1.tar.xz` i instalujemy w nastepujący sposób:
 ```
 cd qtconnectivity-everywhere-src-6.5.1
@@ -208,7 +211,7 @@ cd ..
 rm -rf qtconnectivity-everywhere-src-6.5.1
 ```
 ## Podsumowanie
-W poradniku https://github.com/PhysicsX/QTonRaspberryPi/blob/main/README.md zawarte są przykladowe programy za pomocą których możemy sprawdzić czy proces przebiegł pomyślnie.
+W poradniku https://github.com/PhysicsX/QTonRaspberryPi/blob/main/README.md zawarte są przykladowe programy za pomocą których możemy sprawdzić czy proces przebiegł pomyślnie. Ogromne podziękowania dla Kevina Strobela i PhysicsX, których repozytoria na githubie pomogły rozwiązać problemy jakie napotkałem podczas krosowania na swoim sprzęcie. Linki do ich repozytoriów można znaleźć poniżej.
 # Links
 [1] https://wiki.qt.io/Cross-Compile_Qt_6_for_Raspberry_Pi
 
