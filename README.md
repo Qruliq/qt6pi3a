@@ -5,6 +5,7 @@ Cross-compiling Qt 6 Raspberry pi
 Cross-compilation is very well known in embedded circles. Also QT, due to its popularity, is often used in various projects. However, the latest version requires cmake, which at first glance should not be a problem, but problem appears with older hardware (in this case, raspberry). The official QT wiki doesn't help either, as its wiki only lists the process on Rpi4. This tutorial shows how to "cross" your program for Rpi3A+ and Ubuntu 20.04, furthermore with basic  knowledge in this matter, you will be able to repeat this process for other architectures/microcontrollers.
 ## Getting Started
 * **Raspberry**
+
 Let's start with raspberry. Install the operating system on raspberry pi (in this case raspibian). The installer can be downloaded: https://www.raspberrypi.com/software/operating-systems/
 
 Then update and upgrade to the newest version.
