@@ -28,6 +28,25 @@ Update the system on linux, as it was done for microcontroller.
 sudo apt update 
 sudo apt upgrade -y 
 ```
+As mentioned earlier, QT6 requires cmake. Installing cmake by typing `apt-install` does not install the latest version. So it necessary to install cmake directly from the repository.
+```
+sudo apt-get install -y build-essential libssl-dev
+wget https://github.com/Kitware/CMake/releases/download/v3.25.0/cmake-3.25.0.tar.gz
+tar -zxvf cmake-3.25.0.tar.gz
+cd cmake-3.25.0
+./bootstrap
+make
+sudo make install -y
+cd ..
+```
+After that, check if everything went as planned by typing `cmake --version`. If cmake version is 3.25.0, the process was successful.
+To simplify whole process, we can declare a few variables in bash, which will be useful in the further process.
+```
+QT_VERSION="6.5.1"
+pi_username="pi"
+pi_ip_address="192.168.2.153"
+USER="user"
+```
 # PL
 ## Wstęp
 Temat "cross-kompilacji" jest bardzo dobrze znany w kręgach embedded. Również QT ze względu na swoją popularność jest często wykorzystywana w różnych projektach. Jednakże najnowsza wersja wymaga użycia cmake, co na pierwszy rzut oka nie powinno być problem, aczkolwiek przy urzywaniu starszego hardwaru (w tym przypadku raspberry) może napsuć krwi. Oficjalna strona wiki QT również nie pomaga, gdyż w swojej wiki zawierte jest jedynie przeprowadzenie procesu na Rpi4. Poniżej przedstwione jest jak "skrosować" swój program dla Rpi3A+ i systemie Ubuntu 20.04, aczkolwiek rozumiejąc pewne zależności będzie się w stanie powtórzyć ten proces dla innych architektur/mikrokontrolerów.
@@ -68,7 +87,7 @@ sudo make install -y
 cd ..
 ```
 Po wszystkim sprawdzamy czy wszystko poszło po naszej myśli wpisując `cmake --version`. Jeżeli cmake version to 3.25.0, oznacza to że proces przeszedło pomyślnie.
-Dla ułatwienia sprway możemy w bashu zadeklarować parę zmiennych, które przydadzą nam się w dalszym procesie.
+Dla ułatwienia sprawy możemy w bashu zadeklarować parę zmiennych, które przydadzą nam się w dalszym procesie.
 ```
 QT_VERSION="6.5.1"
 pi_username="pi"
