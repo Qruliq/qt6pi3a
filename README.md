@@ -93,7 +93,8 @@ cd ..
 rm -rf qtpi-build
 --chown=qtpi:qtpi _copyQtToRPi.sh /home/qtpi/copyQtToRPi.sh
 ```
-**Attention!**
+**important!**
+
 If program uses other libraries than the base ones, they should also be installed. For example, if program uses bluetooth, qtconnectivity must be installed. So download the package via `wget https://download.qt.io/archive/qt/6.5/6.5.1/submodules/qtconnectivity-everywhere-src-6.5.1.tar.xz`, then unzip it via `tar -zxvf qtconnectivity-everywhere-src-6.5.1.tar.xz` and use the following prompts:
 ```
 cd qtconnectivity-everywhere-src-6.5.1
