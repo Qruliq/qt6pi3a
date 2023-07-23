@@ -23,7 +23,7 @@ sudo mkdir /usr/local/qt6
 Last but not least, it is worth checking the architecture we are working with by typing `uname -m` command in shell. In my case it is aarch64.
 * **Host**
 
-Update the system on linux, as it was done in microcontroller.
+Update the system on linux, as it was done for microcontroller.
 ```
 sudo apt update 
 sudo apt upgrade -y 
